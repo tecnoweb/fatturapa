@@ -11,6 +11,7 @@ class FatturaPA {
 	const VERSION = '0.3.0';
 	protected $_node = ['FatturaElettronicaHeader' => [], 'FatturaElettronicaBody' => []];
 	protected $_schema = [];	// schema .xsd (nella generazione dell'XML va rispettato anche l'ordine dei nodi)
+	public $totale_pagamento_differito;
 	
 	/**
 	 * Imposta il formato (utilizzare constanti definite in FatturaPA_Formato)
@@ -22,7 +23,10 @@ class FatturaPA {
 		$this->_set_node('FatturaElettronicaHeader/DatiTrasmissione/FormatoTrasmissione', $formato);
 		$this->_schema = $this->_build_schema();
 	}
-	
+	public function get_pagamento_differito()
+	{
+		return $this->totale_pagamento_differito;
+	}
 	/**
 	 * Imposta dati trasmittente (es.: azienda o commercialista) (opzionale: copia dati mittente)
 	 * @param array $data
@@ -312,7 +316,7 @@ class FatturaPA {
 				]);
 			}
 		}
-		
+		$this->totale_pagamento_differito = $sommaImporto;
 		// ritorna il totale fattura iva inclusa
 		return $totale;
 	}
